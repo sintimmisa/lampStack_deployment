@@ -19,6 +19,12 @@ Vagrant.configure("2") do |config|
       vb.cpus = 2
     end
 
+  #Grant permission for script
+  ubuntuMaster.vm.provision "shell", inline:<<-SHELL
+
+    chmod +x  ./script/script.sh
+  SHELL
+
     # Provision master node to set up LAMP stack
     ubuntuMaster.vm.provision "shell", inline: <<-SHELL
 
