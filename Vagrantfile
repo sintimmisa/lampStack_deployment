@@ -20,20 +20,20 @@ Vagrant.configure("2") do |config|
     end
 
   #Grant permission for script
-  ubuntuMaster.vm.provision "shell", inline:<<-SHELL
+  #ubuntuMaster.vm.provision "shell", inline:<<-SHELL
 
-    chmod +x  ./script/script.sh
-  SHELL
+    ###chmod +x  ./script/script.sh
+  ##SHELL
 
     # Provision master node to set up LAMP stack
-    ubuntuMaster.vm.provision "shell", inline: <<-SHELL
+   # ubuntuMaster.vm.provision "shell", inline: <<-SHELL
 
     # Load Bash script file from script folder
-      sh "./script/script.sh
+   #   sh "./script/script.sh
 
-    SHELL
+   # SHELL
 
-  end
+end
 
   # Configure slave machine (consider using Ansible for deployment on slave)
   config.vm.define "ubuntuSlave" do |ubuntuSlave|
