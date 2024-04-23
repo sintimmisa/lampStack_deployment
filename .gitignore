@@ -1,5 +1,5 @@
 /database.cfg
-/inventory.yml
+inventory.yml
 /ubuntuSlave_lampStack_playbook.yml
 
 /.vagrant
