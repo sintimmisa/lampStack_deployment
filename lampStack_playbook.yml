@@ -1,0 +1,64 @@
+---
+- name: Execute bash script
+  hosts: slave
+  #become: true
+
+  # Tasks to be executed 
+  tasks:
+    # 1. Copy script to slave
+    - name: Copy LAMP deployment script
+      copy:
+        src:  script/script.sh
+        dest: /home/vagrant/
+        owner: root
+        group: root
+        mode: 0755
+      when: not inventor_host== "ubuntuMaster"  # Only copy if not already present
+
+
+    # 2. Deploy LAMP STACK APP  on the ubuntuSlave
+    - name: Run LAMP deployment script
+      script: /home/vagrant/script.sh
+      when: not inventory_hostname=="ubuntuMaster"
+       # Capture script execution output
+
+    
+    # 3. Verify PHP application accessibility
+    - name: Test application accessibility
+      uri:
+        url: http://{{ ansible_host }}
+        status_code: 200
+        return_code:ok
+      register: app_status
+      delegate_to:localhost
+
+    # 4. Print App accessibility msg
+    - name: Assert script success and app accessibility
+      debug:
+        msg: "App deploy on {{ ansible_host }}: {{app_status_code==200 }}"
+      #assert:
+       # that:
+       #   - deploy_result.rc == 0
+       #   - app_test.status == 200
+       # msg: "LAMP deployment failed or application is not accessible!"
+
+   
+    # 5. Create cron job for checking server uptime
+    - name: Add cron job for uptime monitoring
+      cron:
+        name: check_uptime
+        job: "*/15 * * * * /bin/uptime >> /var/log/uptime.log"
+      when: not cron.exists(name="check_uptime")  # Only create if cron job doesn't exist
+
+  # Post-task notification (optional)
+  post_tasks:
+    - name: Send notification about deployment outcome
+      mail:
+        host: your_smtp_server  # Replace with your SMTP server details
+        port: 25
+        username: your_username  # Replace with your SMTP username and password
+        password: your_password  # Replace with your SMTP password
+        sender: you@example.com  # Replace with your email address
+        recipient: you@example.com  # Replace with recipient email address
+        subject: "Slave node LAMP deployment - {{ deploy_result.rc }}"
+        body: "LAMP deployment on Slave node {{ slave_ip }} completed with status code {{ deploy_result.rc }}.  Application accessibility test: {{ app_test.status }}"

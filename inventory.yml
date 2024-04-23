@@ -1,2 +1,6 @@
-[ubuntuSlave] 
-ansible_host=192.168.33.11
+[master] 
+ubuntuMaster ansible_host=192.168.33.10
+
+
+[slave] 
+ubuntuSlave ansible_host=192.168.33.11

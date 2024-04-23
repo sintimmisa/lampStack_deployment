@@ -8,9 +8,9 @@
     fi
 
     # DB configuration
-    DB_NAME =${DB_NAME:-lampStack_db}
-    DB_USER = ${DB_USER:-sysAdmin}
-    DB_PASSWORD = ${DB_PASSWORD:-h@ppy2024}
+    DB_NAME =$DB_NAME
+    DB_USER = $DB_USER
+    DB_PASSWORD = $DB_PASSWORD
     
     LAMPSTACK_URL=${LAMPSTACK_URL:-https://github.com/laravel/laravel}
 
